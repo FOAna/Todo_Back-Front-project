@@ -7,5 +7,6 @@ pip install -r requirements.txt
 
 # run server
 manage.py runserver  
-port http://127.0.0.1:8000/
+# Show result
+http://127.0.0.1:8000/todo
 
