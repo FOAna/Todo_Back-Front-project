@@ -61,7 +61,7 @@ def my_view(request):
 
 @login_required
 def create_todo(request, pk):
-    if request.method == "GET":
+    if request.method == "POST":
         todo = Todo()
         todo.todo_title = pk
         todo.performer = request.user
@@ -91,7 +91,7 @@ def delete_all(request):
 def edit(request, pk, new):
     try:
         todo = Todo.objects.get(pk=pk)
-        if request.method == "GET":
+        if request.method == "POST":
             todo.todo_title = new
             todo.save()
             data = serializers.serialize('json', Todo.objects.filter(performer=request.user))
