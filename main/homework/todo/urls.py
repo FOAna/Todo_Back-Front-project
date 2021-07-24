@@ -17,5 +17,7 @@ urlpatterns += [
     path('delete/<str:pk>', views.delete, name='delete'),
     path('delete_all_todo/', views.delete_all),
     path('edit/<str:pk>/<str:new>', views.edit),
+    path('all_user_data', views.all_user_data),
+    path('pomodoro_count/<str:pk>', views.pomodoro_count)
 ]
 

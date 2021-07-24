@@ -14,5 +14,5 @@ class Todo(models.Model):
 
 class Pomodoro(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    count = models.IntegerField()
+    count = models.IntegerField(default=0, null=True)
 

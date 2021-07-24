@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Todo
+from .models import Todo, Pomodoro
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from .forms import UserRegistrationForm, LoginForm
@@ -44,10 +44,16 @@ def user_register(request):
         if user_form.is_valid():
             # Create a new user object but avoid saving it yet
             new_user = user_form.save(commit=False)
+
             # Set the chosen password
             new_user.set_password(user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
+
+            user_pomodoro = Pomodoro()
+            user_pomodoro.user = new_user
+            user_pomodoro.count = 0
+            user_pomodoro.save()
             return render(request, 'account/register_done.html', {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
@@ -56,7 +62,7 @@ def user_register(request):
 
 @login_required
 def my_view(request):
-    return HttpResponse('Authenticated successfully!!!!!!!!!!!')
+    return HttpResponse('За эту часть сайта отвечает Frontend')
 
 
 @login_required
@@ -66,7 +72,7 @@ def create_todo(request, pk):
         todo.todo_title = pk
         todo.performer = request.user
         todo.save()
-        data = serializers.serialize('json', Todo.objects.filter(performer=request.user))
+        data = serializers.serialize('json', Todo.objects.filter(performer=request.user), fields=('pk', 'todo_title'))
         return JsonResponse(data,  safe=False)
 
 
@@ -82,9 +88,12 @@ def delete(request, pk):
 
 @login_required
 def delete_all(request):
-    all_todo = Todo.objects.filter(performer=request.user)
-    all_todo.delete()
-    return HttpResponseRedirect("/todo")
+    try:
+        all_todo = Todo.objects.filter(performer=request.user)
+        all_todo.delete()
+        return HttpResponseRedirect("/todo")
+    except Todo.DoesNotExist:
+        return HttpResponseNotFound("<h2>Person not found</h2>")
 
 
 @login_required
@@ -98,3 +107,24 @@ def edit(request, pk, new):
             return JsonResponse(data, safe=False)
     except Todo.DoesNotExist:
         return HttpResponseNotFound("<h2>Person not found</h2>")
+
+
+@login_required
+def all_user_data(request):
+    select_data = [*Todo.objects.filter(performer=request.user), *Pomodoro.objects.filter(user=request.user)]
+    serializer = serializers.serialize('json', select_data, fields=('pk', 'todo_title', 'count'))
+    return JsonResponse(serializer, safe=False)
+
+
+@login_required
+def pomodoro_count(request, pk):
+    if request.method == "POST":
+        pomodoro = Pomodoro.objects.get(user=request.user)
+        if pk == 'add':
+            pomodoro.count += 1
+        elif pk == 'delete':
+            pomodoro.count = 0
+        pomodoro.save()
+
+        data = {'count': pomodoro.count}
+        return JsonResponse(data)
