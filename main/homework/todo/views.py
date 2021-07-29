@@ -62,7 +62,7 @@ def user_register(request):
 
 @login_required
 def my_view(request):
-    return HttpResponse('За эту часть сайта отвечает Frontend')
+    return render(request, 'my_view/index.html')
 
 
 @login_required
