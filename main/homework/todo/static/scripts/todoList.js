@@ -1,17 +1,6 @@
-let tasks = [
-  { id: "1", content: "Задача 1" },
-  { id: "2", content: "Задача 2" },
-  { id: "3", content: "Задача 3" },
-  { id: "4", content: "Задача 4" },
-  { id: "5", content: "Задача 5" },
-  { id: "6", content: "Задача 6" },
-  { id: "7", content: "Задача 7" },
-  { id: "8", content: "Задача 8" },
-  { id: "9", content: "Задача 9" },
-  { id: "10", content: "Задача 10" },
-];
+let tasks = [];
 
-function CreateTask(i) {
+async function CreateTask(i) {
   const li = document.createElement("li");
   li.classList.add("checkbox");
   const input = document.createElement("input");
@@ -24,10 +13,10 @@ function CreateTask(i) {
   label.innerText = tasks[i].content;
   const imgEditor = document.createElement("img");
   imgEditor.classList.add("checkbox__editor");
-  imgEditor.src = $("urlPencil").val();
+  imgEditor.src = `${DJANGO_STATIC_URL}/static/images/pencil.png`;
   const imgRemove = document.createElement("img");
   imgRemove.classList.add("checkbox__remove");
-  imgRemove.src = $("urlClose").val();
+  imgRemove.src = `${DJANGO_STATIC_URL}/static/images/close.svg`;
   const imgContainer = document.createElement("div");
   imgContainer.classList.add("checkbox__container");
   const taskContainer = document.createElement("div");
@@ -54,9 +43,11 @@ function CreateTask(i) {
   });
 
   // Функция-обработчик события клика
-  imgRemove.onclick = function () {
+  imgRemove.onclick = async function () {
+    await fetch(`http://127.0.0.1:8000/todo/delete/${tasks[i].id}`);
     tasks.splice[(i, 1)];
     li.remove();
+    getAllTasks();
   };
 
   imgEditor.onclick = function () {
@@ -66,7 +57,7 @@ function CreateTask(i) {
   };
 }
 
-function CreateEditedTask(i, parent) {
+async function CreateEditedTask(i, parent) {
   if (i >= tasks.length) {
     tasks.push({ id: `${i} New element`, content: "" });
   }
@@ -77,31 +68,74 @@ function CreateEditedTask(i, parent) {
   textInput.value = tasks[i].content;
   const imgCheck = document.createElement("img");
   imgCheck.classList.add("checkbox__save");
-  imgCheck.src = "./images/check.svg";
-  imgCheck.onclick = function () {
+  imgCheck.src = `${DJANGO_STATIC_URL}/static/images/check.svg`;
+  // сохранение новой задачи
+  imgCheck.onclick = async function () {
+    if (tasks[i].content) {
+      await fetch(
+        `http://127.0.0.1:8000/todo/edit/${tasks[i].id}/${textInput.value}`,
+        {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrftoken,
+          },
+        }
+      );
+    } else {
+      await fetch(`http://127.0.0.1:8000/todo/create/${textInput.value}/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrftoken,
+        },
+      });
+    }
     tasks[i].content = textInput.value;
     newLi.remove();
     CreateTask(i);
+    getAllTasks();
   };
   newLi.appendChild(textInput);
   newLi.appendChild(imgCheck);
   parent.insertBefore(newLi, parent.children[i]); // в parent вставляем newLi перед (выше слой) parent.children[i]
 }
 
-for (let i = 0; i < tasks.length; i++) {
-  CreateTask(i);
-}
-
-document.getElementById("removeAll").addEventListener("click", function () {
-  tasks = [];
-  const list = document.getElementById("todoList");
-  while (list.firstChild) {
-    list.removeChild(list.lastChild);
-  }
-});
+document
+  .getElementById("removeAll")
+  .addEventListener("click", async function () {
+    tasks = [];
+    const list = document.getElementById("todoList");
+    while (list.firstChild) {
+      list.removeChild(list.lastChild);
+    }
+    await fetch("http://127.0.0.1:8000/todo/delete_all_todo/");
+    getAllTasks();
+  });
 
 document.getElementById("addNewTask").addEventListener("click", function () {
   const parent = document.getElementById("todoList");
   CreateEditedTask(tasks.length, parent);
   console.log(tasks.length);
 });
+
+async function getAllTasks() {
+  tasks = [];
+  const list = document.getElementById("todoList");
+  while (list.firstChild) {
+    list.removeChild(list.lastChild);
+  }
+  await fetch("http://127.0.0.1:8000/todo/all_user_data")
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      const dataArray = JSON.parse(data);
+      tasks = dataArray.map((item) => {
+        return { id: item.pk, content: item.fields.todo_title };
+      });
+      for (let i = 0; i < tasks.length; i++) {
+        CreateTask(i);
+      }
+    });
+}
+
+getAllTasks();

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pomodorka</title>
-    {% load static %}
+    {% load static %} <!--загружаем все запрошенные html'ом файлы из папки static-->
     <link rel="stylesheet" href="{% static 'styles/index.css' %}">
     <link rel="stylesheet" href="{% static 'styles/todoList.css' %}">
     <link rel="stylesheet" href="{% static 'styles/timer.css' %}">
@@ -19,6 +19,10 @@
     <link rel="icon" href="{% static 'images/tomatoFavi.svg' %}" type="image/svg">
     <script defer src="{% static 'scripts/todoList.js' %}"></script>
     <script defer src="{% static 'scripts/timer.js' %}"></script>
+    <script>
+        var csrftoken = '{{ csrf_token }}';
+        var DJANGO_STATIC_URL = '{{ STATIC_URL }}';
+    </script>
 </head>
 
 <body class="mainContent">
