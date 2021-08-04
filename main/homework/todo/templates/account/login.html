@@ -1,12 +1,28 @@
 {% extends "base_template.html" %}
 {% block title %}Log-in{% endblock %}
 {% block content %}
-    <h1>Log-in</h1>
-    <p>Please, use the following form to log-in:</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PomoLogIn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+<body>
+    
+</body>
+</html>
+<div class="login">
+    <h1>Регистрация</h1>
+    <p>Заполните форму, чтобы стать Помодоркой:</p>
     <form action="." method="post">
         {{ form.as_p }}
         {% csrf_token %}
         <p><input type="submit" value="Log-in"></p>
         <input type="hidden" name="next" value="{{next}}" />
     </form>
+</div>
 {% endblock %}

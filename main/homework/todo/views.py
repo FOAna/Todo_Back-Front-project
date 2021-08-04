@@ -62,7 +62,7 @@ def user_register(request):
 
 @login_required
 def my_view(request):
-    return render(request, 'my_view/index.html')
+    return render(request, 'my_view/indexFront.html')
 
 
 @login_required

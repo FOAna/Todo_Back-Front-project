@@ -41,10 +41,25 @@ body {
   height: 40px;
 }
 
-.main {
+.main__pomodoro {
   display: flex;
   justify-content: space-around;
-  margin: 48px 40px;
+  margin: 16px 40px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.main__quote {
+  background: linear-gradient(45deg, #e8e7cb, #8fe0c9, #56cbe1);
+  padding: 16px;
+}
+
+.main__figcaption {
+  text-align: right;
+  color: #1f717e;
 }
 
 .main__todo,
