@@ -14,7 +14,7 @@ def index(request):
     request.session['num_visits'] = num_visits+1
 
     return render(
-        request, 'index.html',
+        request, 'my_view/indexFront.html',
         context={'num_visits': num_visits}
     )
 

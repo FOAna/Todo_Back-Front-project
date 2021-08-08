@@ -41,6 +41,23 @@ body {
   height: 40px;
 }
 
+.header__logout {
+  position: absolute;
+  right: 32px;
+  bottom: 32px;
+}
+
+.header__logout_door {
+  width: 64px;
+  height: 64px;
+  transition: 0.4s;
+}
+
+.header__logout_door:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
 .main__pomodoro {
   display: flex;
   justify-content: space-around;
@@ -70,4 +87,22 @@ body {
   text-align: center;
   display: flex;
   flex-direction: column;
+}
+
+.startPage img {
+  width: 200px;
+  height: 200px;
+  margin: 32px;
+}
+
+.startPage {
+  width: 50%;
+  margin: auto;
+  padding: 64px;
+  text-align: center;
+  background: linear-gradient(
+    rgba(159, 46, 244, 0.9),
+    rgba(249, 125, 100, 0.9),
+    rgba(255, 205, 66, 0.9)
+  );
 }

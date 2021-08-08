@@ -9,7 +9,7 @@ pip install -r requirements.txt
 # run server
 
 Перейти в папку `cd Todo_Back-Front-project/main/homework/`
-`python manage.py runserver`
+Запустить сервер `python manage.py runserver`
 
 # Show result
 
