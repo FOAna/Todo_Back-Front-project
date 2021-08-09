@@ -1,9 +1,67 @@
 {% extends "base_template.html" %}
-
-{% block title %}Create an account{% endblock %}
-
+{% block title %}{% endblock %}
 {% block content %}
-    <h1>Your create new account</h1>
-    <p>Now you can login:</p>
-    <a href="{% url 'login' %}">Login</a>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500&display=swap"
+        rel="stylesheet">
+    <title>Pomodoro &#128077;</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'images/tomatoFavi.svg' %}" type="image/svg">
+    <style type="text/css">
+        body{
+            background-image: url("{% static './images/tomatoBackground.jpg' %}");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            font-family: "Montserrat Alternates", sans-serif;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        input {
+            font-family: "Montserrat Alternates", sans-serif;
+        }
+        .login {
+            width: 50%;
+            margin: auto;
+            padding: 64px;
+            text-align: center;
+            background: linear-gradient(rgba(159, 46, 244, 0.9), rgba(249, 125, 100, 0.9), rgba(255, 205, 66, 0.9));
+        }
+        form {
+            margin-top: 32px;
+        }
+        .button {
+            padding: 16px;
+            margin-top: 16px;
+            width: 20%;
+            border-radius: 10px;
+            background: linear-gradient(to right, #fff25c, #f39ed9, #868adc);
+            border:2px solid #4d3e96;
+            font-weight: bold;
+            color: #432b7c;
+            font-size: 16px;
+            transition: 0.4s;
+            text-decoration: none;
+        }
+        .button:hover {
+            background: linear-gradient(to left, #fff25c, #f39ed9, #868adc);
+        }
+        p {
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login">
+        <h1>Поздравляем! Ты стал(а) Помодоркой!</h1>
+        <p>Теперь ты можешь войти в свой аккаунт:</p>
+        <a class="button" href="{% url 'login' %}">Войти</a>
+    </div>
+</body>
 {% endblock %}
