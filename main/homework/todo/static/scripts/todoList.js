@@ -129,9 +129,18 @@ async function getAllTasks() {
     })
     .then((data) => {
       const dataArray = JSON.parse(data);
-      tasks = dataArray.map((item) => {
-        return { id: item.pk, content: item.fields.todo_title };
-      });
+      tasks = dataArray
+        .map((item) => {
+          return { id: item.pk, content: item.fields.todo_title };
+        })
+        .filter((item) => {
+          if (item.content === undefined) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+      console.log(tasks);
       for (let i = 0; i < tasks.length; i++) {
         CreateTask(i);
       }

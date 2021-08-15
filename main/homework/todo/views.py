@@ -54,7 +54,8 @@ def user_register(request):
             user_pomodoro.user = new_user
             user_pomodoro.count = 0
             user_pomodoro.save()
-            return render(request, 'account/register_done.html', {'new_user': new_user})
+            login(request, user_pomodoro.user)
+            return HttpResponseRedirect('/todo/my_view/')
     else:
         user_form = UserRegistrationForm()
     return render(request, 'account/register.html', {'user_form': user_form})
